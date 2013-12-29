@@ -1,0 +1,58 @@
+.gitignore
+
+PROJECT_ROOT = $(TUP_CWD)
+
+CFLAGS+= -fplan9-extensions
+CFLAGS+= -ggdb3
+
+TARGET= MK20DX32VLF5
+
+COPTFLAGS= -Os
+CWARNFLAGS= -Wall -Wno-main
+
+ifndef DEBUG
+CFLAGS+= $(COPTFLAGS)
+endif
+CFLAGS += $(CWARNFLAGS)
+
+CFLAGS+= -mcpu=cortex-m4 -msoft-float -mthumb -ffunction-sections -fdata-sections -fno-builtin -fstrict-volatile-bitfields
+
+INCLUDES+= -I$(PROJECT_ROOT)/include -I$(PROJECT_ROOT)/lib
+INCLUDES+= -I$(PROJECT_ROOT)/CMSIS/Include -I.
+INCLUDES+= -include $(PROJECT_ROOT)/include/mchck_internal.h
+
+LDFLAGS+= -Wl,--gc-sections
+LDFLAGS+= -fwhole-program
+
+TARGETLD= $(TARGET).ld
+
+CPPFLAGSLD+= -P -CC -Ild -I.
+CPPFLAGSLD+= -DTARGET_LDSCRIPT='"$(TARGETLD)"'
+
+LDSCRIPTS+= ld/$(TARGETLD)
+
+ifdef LOADER
+CPPFLAGSLD+=   -DMEMCFG_LDSCRIPT='"loader.ld"'
+LDSCRIPTS+= $(PROJECT_ROOT)/ld/loader.ld
+BINSIZE=    $(LOADER_SIZE)
+LOADADDR=   $(LOADER_ADDR)
+else
+CPPFLAGSLD+=   -DMEMCFG_LDSCRIPT='"app.ld"'
+LDSCRIPTS+= $(PROJECT_ROOT)/ld/app.ld
+BINSIZE=    $(APP_SIZE)
+LOADADDR=   $(APP_ADDR)
+endif
+
+LDTEMPLATE = $(PROG).ld-template
+LDFLAGS+=   -T $(LDTEMPLATE)
+LDFLAGS+=       -nostartfiles
+LDFLAGS+=   -Wl,-Map=$(PROG).map
+
+!cc = |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi-gcc $(CFLAGS) $(CPPFLAGS) $(INCLUDES) -std=gnu99 -c %f -o %o |> %B.o $(PROJECT_ROOT)/<autoobjs> 
+!cpp = |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi-g++ $(CFLAGS) $(CPPFLAGS) $(INCLUDES) -std=gnu++11 -c %f -o %o |> %B.o $(PROJECT_ROOT)/<autoobjs> 
+!ar = |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi-ar rcs %o %f |>
+!link = |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi- $(LDFLAGS) %f $(LIBS) -o %o |>
+
+!generateLdScript = |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi-gcc -E -o %o $(CPPFLAGSLD) $(PROJECT_ROOT)/ld/link.ld.S |> $(LDTEMPLATE)
+
+#!linkWithC = 

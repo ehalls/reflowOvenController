@@ -1,0 +1,6 @@
+PROG=blink
+
+include_rules
+
+: foreach *.c |> !cc |>
+: foreach *.cpp |> !cpp |>

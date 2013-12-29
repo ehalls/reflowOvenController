@@ -1,0 +1,16 @@
+PROG=blink
+
+include_rules
+
+OUTPUT_BASE = blinkout
+
+: foreach *.c |> !cc |>
+: foreach *.cpp |> !cpp |>
+: |> !generateLdScript |>
+: <autoobjs> | $(LDTEMPLATE) |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi-gcc -o %o $(CFLAGS) $(LDFLAGS) %<autoobjs> |> $(PROG).elf | $(PROG).map
+: $(PROG).elf |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi-objcopy -O binary %f %o |> $(PROG).bin
+: $(PROG).bin |> ls -l %f | awk '{ s=$5; as=29696; printf "%%d bytes available\n", (as - s); if (s > as) { exit 1; }}' |> 
+#: *.o  $(ARFILE) |> !link |> $(OUTPUT_BASE).elf
+#: $(OUTPUT_BASE).elf |> avr-objcopy $(EEPFLAGS) %f %o |> $(OUTPUT_BASE).eep
+#: $(OUTPUT_BASE).elf |> avr-objcopy $(HEXFLAGS) %f %o |> $(OUTPUT_BASE).hex
+#: $(OUTPUT_BASE).elf |> avr-size -C --mcu=$(MCU) %f |>
