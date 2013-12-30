@@ -22,3 +22,4 @@ extern FILE *stdout;
 int printf(const char *fmt, ...)  __attribute__((__format__ (printf, 1, 2)));
 int vfprintf(FILE *f, const char *fmt, va_list args);
 void fputc(int c, FILE *f);
+int fflush(FILE *f);

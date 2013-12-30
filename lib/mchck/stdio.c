@@ -16,3 +16,12 @@ fputc(int c, FILE *f)
         }
         crit_exit();
 }
+
+int
+fflush(FILE *f)
+{
+    crit_enter();
+    f->ops->write(f->outbuf, f->outbuf_pos, f->ops_data);
+    f->outbuf_pos = 0;
+    crit_exit();
+}

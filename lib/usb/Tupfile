@@ -1,0 +1,9 @@
+INCLUDES += -I$(PROJECT_ROOT)/host
+
+include_rules
+
+ifdef USB
+: foreach $(PROJECT_ROOT)/*.desc |> $(PROJECT_ROOT)/lib/usb/gen-desc/gen-desc %f |> %f.c $(PROJECT_ROOT)/<usbdescriptors> %f.h
+: foreach *.c $(PROJECT_ROOT)/*.desc.c | $(PROJECT_ROOT)/*.desc.h |> !cc |>
+: foreach *.cpp |> !cpp |>
+endif

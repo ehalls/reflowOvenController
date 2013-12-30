@@ -18,7 +18,7 @@ CFLAGS += $(CWARNFLAGS)
 CFLAGS+= -mcpu=cortex-m4 -msoft-float -mthumb -ffunction-sections -fdata-sections -fno-builtin -fstrict-volatile-bitfields
 
 INCLUDES+= -I$(PROJECT_ROOT)/include -I$(PROJECT_ROOT)/lib
-INCLUDES+= -I$(PROJECT_ROOT)/CMSIS/Include -I.
+INCLUDES+= -I.
 INCLUDES+= -include $(PROJECT_ROOT)/include/mchck_internal.h
 
 LDFLAGS+= -Wl,--gc-sections
@@ -54,5 +54,3 @@ LDFLAGS+=   -Wl,-Map=$(PROG).map
 !link = |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi- $(LDFLAGS) %f $(LIBS) -o %o |>
 
 !generateLdScript = |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi-gcc -E -o %o $(CPPFLAGSLD) $(PROJECT_ROOT)/ld/link.ld.S |> $(LDTEMPLATE)
-
-#!linkWithC = 
