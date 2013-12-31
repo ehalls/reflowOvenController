@@ -4,10 +4,11 @@ include_rules
 
 OUTPUT_BASE = reflowOvenOut
 
+#: foreach *.c |> echo %f |>
 : foreach *.c | <usbdescriptors> |> !cc |>
 : foreach *.cpp | <usbdescriptors> |> !cpp |>
 : |> !generateLdScript |>
 #: <autoobjs> |> echo %<autoobjs> |> 
-: <autoobjs> | $(LDTEMPLATE) |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi-gcc -o %o $(CFLAGS) $(LDFLAGS) %<autoobjs> |> $(PROG).elf | $(PROG).map
+: <autoobjs> | $(LDTEMPLATE) |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi-g++ -o %o $(CFLAGS) $(LDFLAGS) -lnosys %<autoobjs> |> $(PROG).elf | $(PROG).map
 : $(PROG).elf |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi-objcopy -O binary %f %o |> $(OUTPUT_BASE).bin
 : $(OUTPUT_BASE).bin |> ls -l %f | awk '{ s=$5; as=29696; printf "%%d bytes available\n", (as - s); if (s > as) { exit 1; }}' |> 

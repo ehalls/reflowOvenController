@@ -32,12 +32,12 @@ SECTIONS
     {
         *(.ARM.extab* .gnu.linkonce.armextab.*)
     } > rom
-
+    PROVIDE_HIDDEN (__exidx_start = .);
     .ARM.exidx :
     {
         *(.ARM.exidx* .gnu.linkonce.armexidx.*)
     } > rom
-
+    PROVIDE_HIDDEN (__exidx_end = .);
     . = ALIGN(4);
     _etext = .;
 
