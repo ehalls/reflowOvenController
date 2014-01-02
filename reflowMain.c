@@ -3,27 +3,9 @@
 #include "millis.h"
 #include "lib/mchck/taskqueue.h"
 
-#include "usb-serial-loopback.desc.h"
-
+#include "menuHandler.h"
 #include "buttons.h"
 #include "temperatureMonitor.h"
-
-static struct cdc_ctx cdc;
-
-static void
-new_data(uint8_t *data, size_t len)
-{
-        cdc_write(data, len, &cdc);
-        if((char)*data == 't')
-        {
-            printf("Temp: %k\r\n", getTemperature());
-        }
-        if((char)*data == 'm')
-        {
-            printf("Millis: %ld\r\n", millis_get());
-        }
-        cdc_read_more(&cdc);
-}
 
 static int
 blink(millis_t time)
@@ -41,13 +23,6 @@ static int blinkAnother(millis_t time)
     //timeout_add(&anotherCtx, 1001, blinkAnother, NULL);
 
     return 0;
-}
-
-void
-init_vcdc(int config)
-{
-        cdc_init(new_data, NULL, &cdc);
-        cdc_set_stdout(&cdc);
 }
 
 static void aShortCallback(void)
@@ -92,7 +67,7 @@ main(void)
     gpio_dir(GPIO_PTB0, GPIO_OUTPUT);
     pin_mode(GPIO_PTB0, PIN_MODE_DRIVE_HIGH);
 
-    usb_init(&cdc_device);
+    menuInit();
     spi_init();
 
     millis_init();
