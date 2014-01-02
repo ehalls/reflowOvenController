@@ -1,6 +1,10 @@
 .gitignore
 
 PROJECT_ROOT = $(TUP_CWD)
+
+TOOLCHAIN_ROOT = /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin
+
+CFLAGS+= -fplan9-extensions
 CFLAGS+= -ggdb3
 
 TARGET= MK20DX32VLF5
@@ -46,9 +50,9 @@ LDFLAGS+=   -T $(LDTEMPLATE)
 LDFLAGS+=       -nostartfiles
 LDFLAGS+=   -Wl,-Map=$(PROG).map
 
-!cc = |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi-gcc -fplan9-extensions $(CFLAGS) $(CPPFLAGS) $(INCLUDES) -std=gnu99 -c %f -o %o |> %B.o $(PROJECT_ROOT)/<autoobjs> 
-!cpp = |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi-g++ $(CFLAGS) $(CPPFLAGS) $(INCLUDES) -std=gnu++11 -c %f -o %o |> %B.o $(PROJECT_ROOT)/<autoobjs> 
-!ar = |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi-ar rcs %o %f |>
-!link = |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi- $(LDFLAGS) %f $(LIBS) -o %o |>
+!cc = |> $(TOOLCHAIN_ROOT)/arm-none-eabi-gcc $(CFLAGS) $(CPPFLAGS) $(INCLUDES) -std=gnu99 -c %f -o %o |> %B.o $(PROJECT_ROOT)/<autoobjs> 
+!cpp = |> $(TOOLCHAIN_ROOT)/arm-none-eabi-g++ $(CFLAGS) $(CPPFLAGS) $(INCLUDES) -std=gnu++11 -c %f -o %o |> %B.o $(PROJECT_ROOT)/<autoobjs> 
+!ar = |> $(TOOLCHAIN_ROOT)/arm-none-eabi-ar rcs %o %f |>
+!link = |> $(TOOLCHAIN_ROOT)/arm-none-eabi- $(LDFLAGS) %f $(LIBS) -o %o |>
 
-!generateLdScript = |> /home/brad/Dev/gcc-arm-none-eabi-4_7-2013q1/bin/arm-none-eabi-gcc -E -o %o $(CPPFLAGSLD) $(PROJECT_ROOT)/ld/link.ld.S |> $(LDTEMPLATE)
+!generateLdScript = |> $(TOOLCHAIN_ROOT)/arm-none-eabi-gcc -E -o %o $(CPPFLAGSLD) $(PROJECT_ROOT)/ld/link.ld.S |> $(LDTEMPLATE)
