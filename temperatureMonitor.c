@@ -4,11 +4,12 @@
 
 #include "lib/mchck/taskqueue.h"
 
+
 static struct spi_ctx thermocouple;
 
 static uint8_t temperatureData[2];
 
-static float currentTemperature;
+static fix_s15_16_t currentTemperature;
 
 int temperatureCallback(millis_t time);
 
@@ -33,7 +34,7 @@ int temperatureCallback(millis_t time)
     return 0;
 }
 
-float getTemperature(void)
+fix_s15_16_t getTemperature(void)
 {
     return currentTemperature;
 }

@@ -16,7 +16,7 @@ new_data(uint8_t *data, size_t len)
         cdc_write(data, len, &cdc);
         if((char)*data == 't')
         {
-            printf("Temp: %d\r\n", (uint16_t)getTemperature());
+            printf("Temp: %k\r\n", getTemperature());
         }
         if((char)*data == 'm')
         {
@@ -83,6 +83,7 @@ static void aLongCallback2(void)
 int
 main(void)
 {
+    pin_mode(PIN_PTC0, PIN_MODE_MUX_ALT2); // Flash CS pin
     pin_mode(PIN_PTC4, PIN_MODE_MUX_ALT2);//SPI Pin mode initialization
     pin_mode(PIN_PTC5, PIN_MODE_MUX_ALT2);
     pin_mode(PIN_PTC6, PIN_MODE_MUX_ALT2);
