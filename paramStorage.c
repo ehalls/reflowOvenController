@@ -8,7 +8,7 @@
 
 config params;
 
-static bool done = false;
+static volatile bool done = false;
 struct spiflash_ctx sfctx;
 
 void waitCallback(void *data)

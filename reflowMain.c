@@ -6,6 +6,7 @@
 #include "menuHandler.h"
 #include "buttons.h"
 #include "temperatureMonitor.h"
+#include "paramStorage.h"
 
 static int
 blink(millis_t time)
@@ -84,8 +85,9 @@ main(void)
     buttonSetCallback(2, aLongCallback2, 1);
 
     initializeTemperature();
+    paramLoad();
 
-    scheduleFunction(blink, 0, 0, 1000);
+    scheduleFunction(blink, ID_BLINK, 0, 1000);
     //scheduleFunction(blinkAnother, 0, 0, 250);
 
     while(1)

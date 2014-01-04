@@ -14,6 +14,7 @@ typedef struct {
     fix_s15_16_t soak_p;
     fix_s15_16_t soak_i;
     fix_s15_16_t soak_d;
+    fix_s15_16_t dessicate_temp;
 } config;
 
 extern config params;

@@ -2,6 +2,7 @@
 #define QUEUE_H
 
 #include "../../millis.h"
+#include "../../scheduleIds.h"
 
 // Settings
 #define QUEUE_DEPTH 10

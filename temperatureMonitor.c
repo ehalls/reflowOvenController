@@ -15,7 +15,7 @@ int temperatureCallback(millis_t time);
 
 void initializeTemperature(void)
 {
-    scheduleFunction(temperatureCallback, 3, 0, 1000);
+    scheduleFunction(temperatureCallback, ID_TEMPERATURE_LOOP, 0, 1000);
 }
 
 static void updateTemperature(void *data)
