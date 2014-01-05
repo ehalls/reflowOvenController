@@ -62,6 +62,20 @@ static void dumpReflowParams(void)
     printf("New Soak Min. Temp (C): "); fflush(stdout);
 }
 
+static void dumpPidParams(void)
+{
+    printf("\r\n");
+    printf("Reflow P: %k\r\n", params.reflow_p);
+    printf("Reflow I: %k\r\n", params.reflow_i);
+    printf("Reflow D: %k\r\n", params.reflow_d);
+    printf("Soak P: %k\r\n", params.soak_p);
+    printf("Soak I: %k\r\n", params.soak_i);
+    printf("Soak D: %k\r\n", params.soak_d);
+    printf("\r\n");
+    printf("Enter new parameters, or blank to keep.\r\n");
+    printf("New Reflow P: "); fflush(stdout);
+}
+
 static int reflowParamHandler(millis_t currentTime)
 {
 
@@ -115,6 +129,48 @@ static int dessicateEntryHandler(millis_t currentTime)
     return 0;
 }
 
+static int pidParamHandler(millis_t currentTime)
+{
+    static int step = 0;
+    static fix_s15_16_t *pArray[6] = { 
+        &(params.reflow_p),
+        &(params.reflow_i),
+        &(params.reflow_d),
+        &(params.soak_p),
+        &(params.soak_i),
+        &(params.soak_d)
+    };
+
+    static const char prompts[6][16] = {
+        "New Reflow P: \0",
+        "New Reflow I: \0",
+        "New Reflow D: \0",
+        "New Soak P: \0",
+        "New Soak I: \0",
+        "New Soak D: \0"
+    };
+
+    if(bufferSize != 0)
+    {
+        *(pArray[step]) = atof(inputBuffer);
+        printf("\r\nSet %k\r\n", *(pArray[step]));
+    }
+    step++;
+    if(step == 6)
+    {
+        step = 0;
+        printf("\r\n");
+        currentCallback = baseMenuHandler;
+        paramWrite();
+    } else {
+        cdc_write_string(prompts[step], &cdc);
+    }
+
+    handlerCleanup();
+
+    return 0;
+}
+
 static int baseMenuHandler(millis_t currentTime)
 {
     if(bufferSize != 1 || inputBuffer[0] == '?')
@@ -148,6 +204,8 @@ static int baseMenuHandler(millis_t currentTime)
     } else if(inputBuffer[0] == '5')
     {
         //Dump current params, print menu, change handler
+        dumpPidParams();
+        currentCallback = pidParamHandler;
     }
 
     handlerCleanup();
