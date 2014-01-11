@@ -70,8 +70,26 @@ main(void)
     gpio_dir(GPIO_PTB0, GPIO_OUTPUT);
     pin_mode(GPIO_PTB0, PIN_MODE_DRIVE_HIGH);
 
+    gpio_dir(GPIO_PTB1, GPIO_OUTPUT);
+    pin_mode(GPIO_PTB1, PIN_MODE_DRIVE_HIGH);
+
+    gpio_dir(GPIO_PTB2, GPIO_OUTPUT);
+    pin_mode(GPIO_PTB2, PIN_MODE_DRIVE_HIGH);
+
+    gpio_dir(GPIO_PTB3, GPIO_OUTPUT);
+    pin_mode(GPIO_PTB3, PIN_MODE_DRIVE_HIGH);
+
+    gpio_dir(GPIO_PTA18, GPIO_OUTPUT);
+    pin_mode(GPIO_PTA18, PIN_MODE_DRIVE_HIGH);
+
     gpio_dir(GPIO_PTA19, GPIO_OUTPUT);
     pin_mode(GPIO_PTA19, PIN_MODE_DRIVE_HIGH);
+
+    gpio_write(GPIO_PTB1, GPIO_HIGH);
+    gpio_write(GPIO_PTB2, GPIO_HIGH);
+    gpio_write(GPIO_PTB3, GPIO_HIGH);
+    gpio_write(GPIO_PTA18, GPIO_HIGH);
+    gpio_write(GPIO_PTA19, GPIO_HIGH);
 
     menuInit();
     spi_init();

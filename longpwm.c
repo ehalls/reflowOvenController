@@ -13,10 +13,10 @@ static void callback(enum pit_id id)
     pwmCounter++;
     if(pwmCounter == pwmDuty)
     {
-        gpio_write(GPIO_PTB0, GPIO_LOW);
+        gpio_write(GPIO_PTA2, GPIO_LOW);
     } else if(pwmCounter == 0)
     {
-        gpio_write(GPIO_PTB0, GPIO_HIGH);
+        gpio_write(GPIO_PTA2, GPIO_HIGH);
     }
     crit_exit();
 
